@@ -3,27 +3,37 @@
 using std::cout;
 using std::endl;
 
-void swap(int &a, int &b) {
+const int ARRAYS_SIZE = 4;
+
+void swapInPairs(int &a, int &b) {
     int temp = a;
     a = b;
     b = temp;
 }
 
+// Вариант (1) передачи ссылкой
+void swapBlocks(int (&arrA)[ARRAYS_SIZE], int (&arrB)[ARRAYS_SIZE]) {
+    for (int i = 0; i < 3; ++i) {
+        swapInPairs(*(arrA + i), *(arrB + i));
+    }
+}
+
+// Вариант (2) передачи указателем. Тут понадобится размер массива
+void printResult(const int* arrA, const int* arrB, size_t size) {
+    for (size_t i{}; i < size; ++i) {
+        cout << *(arrA + i) << " - " << *(arrB + i) << endl;
+    }
+}
+
 int main() {
-    int arrA[] = { 1, 2, 3 };
-    int arrB[] = { 6, 7, 8 };
+    int arrA[] = { 1, 2, 3, 4 };
+    int arrB[] = { 6, 7, 8, 9 };
 
     cout << "Before:\n";
-    for (int i = 0; i < 3; ++i) {
-        cout << *(arrA + i) << " - " << *(arrB + i) << endl;
-    }
+    printResult(arrA, arrB, sizeof(arrA) / sizeof(*arrA));
 
-    for (int i = 0; i < 3; ++i) {
-        swap(*(arrA + i), *(arrB + i));
-    }
+    swapBlocks(arrA, arrB);
 
     cout << "After:\n";
-    for (int i = 0; i < 3; ++i) {
-        cout << *(arrA + i) << " - " << *(arrB + i) << endl;
-    }
+    printResult(arrA, arrB, sizeof(arrA) / sizeof(*arrA));
 }
